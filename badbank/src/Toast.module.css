@@ -1,0 +1,66 @@
+.container {
+  font-size: 1rem;
+  position: fixed;
+  z-index: 10;
+}
+
+.bottom-right {
+  bottom: 1rem;
+  right: 1rem;
+  animation: toast-in-right 1s;
+}
+
+.notification {
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  box-shadow: 0 0 20px gray;
+  color: black;
+  opacity: 0.9;
+  transition: 0.5s ease;
+}
+
+.notification:hover {
+  box-shadow: 0 0 22px gray;
+  opacity: 1;
+}
+
+.toast {
+  height: 5rem;
+  width: 25rem;
+  color: white;
+  padding: 20px 15px 10px 10px;
+}
+
+.container button {
+  float: right;
+  background: none;
+  border: none;
+  color: white;
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 1rem;
+  text-align: left;
+  margin-top: 0;
+  margin-bottom: 6px;
+  width: fit-content;
+}
+
+.description {
+  margin: 0;
+  text-align: left;
+  color: black;
+}
+
+@keyframes toast-in-right {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0%);
+  }
+}
