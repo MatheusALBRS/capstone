@@ -1,15 +1,26 @@
-import { UserContext, UsersData } from "../index";
-import { useContext, useState } from "react";
+import { UserContext } from "../index";
+import { useContext, useState, useEffect } from "react";
 import LoginFirst from "./loginfirst";
 import Login from "./login";
 import Form from "./form";
 
 function AllData() {
   const [pageStatus, setPageStatus] = useState(<LoginFirst />);
-  const data = useContext(UsersData);
+  const [data, setData] = useState();
   const user = useContext(UserContext);
 
   const userSubmissions = user.submissions.map((item) => ({ field: item.action, value: item.value }));
+
+  useEffect(() => {
+    (async () => {
+      const url = "/account/alldata";
+      const response = await fetch(url);
+      const alldata = await response.json();
+      console.log(alldata);
+      setData(alldata)
+    })();
+    
+  }, []);
 
   return (
     <UserContext.Consumer>
@@ -17,7 +28,7 @@ function AllData() {
         return (
           <>
             <h3>users</h3>
-            {JSON.stringify(data)}
+            {<h1>{JSON.stringify(data)}</h1>}
             <hr></hr>
             {value.isLogedIn ? (
               <Form

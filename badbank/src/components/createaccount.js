@@ -38,6 +38,12 @@ function CreateAccount() {
     const validated = checkData();
     if (validated) {
       ctx.push({ name: name, email: email, password: password, balance: 100 });
+      const url = `/account/create/${name}/${email}/${password}`;
+      (async () => {
+        var response = await fetch(url);
+        var data = await response.json();
+        console.log(data);
+      })();
     }
     console.log(ctx);
   };
