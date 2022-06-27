@@ -5,29 +5,53 @@ import Login from "./login";
 import Button from "./button";
 import LoginFirst from "./loginfirst";
 
-function Deposit() {
+function Withdraw() {
   const user = useContext(UserContext);
-  const [deposit, setDeposit] = useState(0);
+  const [withdraw, setWithdraw] = useState(0);
   const [balance, setBalance] = useState(0);
   const [finished, setFinished] = useState(false);
   const [button, setButton] = useState("btn btn-primary disabled");
+  const [status, setStatus] = useState("");
   const [pageStatus, setPageStatus] = useState(<LoginFirst />);
 
   useEffect(() => {
-    deposit <= 0 ? setButton("btn btn-primary disabled") : setButton("btn btn-primary");
-  }, [deposit]);
+    withdraw <= 0 ? setButton("btn btn-primary disabled") : setButton("btn btn-primary");
+  }, [withdraw]);
 
   const clearForm = () => {
-    setDeposit(0);
+    setWithdraw(0);
+    setStatus("");
+  };
+
+  const checkData = () => {
+    const newBalance = Number(user.data[0].balance) - Number(withdraw);
+    if (newBalance < 0) return { validated: false, newBalance: null };
+    return { validated: true, newBalance: newBalance };
+  };
+
+  const updatebalance = async (url) => {
+    const response = await fetch(url);
+    const data = await response.json();
+    console.log(data);
   };
 
   const handleClick = (e) => {
     e.preventDefault();
-    const newBalance = Number(user.data[0].balance) + Number(deposit);
-    user.data[0].balance = newBalance;
-    user.submissions.push({ action: "deposit", value: deposit });
-    setBalance(newBalance);
-    setFinished(true);
+    const { validated, newBalance } = checkData();
+    if (validated) {
+      user.data[0].balance = newBalance;
+      user.submissions.push({ action: "withdraw", value: withdraw });
+      const url = `/update/balance/${user.data[0].name}/${newBalance}`;
+      console.log(user.data[0].name);
+      updatebalance(url);
+      setBalance(newBalance);
+      setFinished(true);
+    }
+    setStatus("Non-Sufficient Funds");
+    setTimeout(() => {
+      setStatus("");
+      setWithdraw(0);
+    }, 1500);
     console.log(balance);
   };
 
@@ -44,8 +68,8 @@ function Deposit() {
                     displayField={[{ field: "Balance:", value: ` $${user.data[0].balance}` }]}
                     image={
                       <Button
-                        text="Make another Deposit"
-                        to="/deposit"
+                        text="Make another withdraw"
+                        to="/withdraw"
                         onClick={() => {
                           setFinished(false);
                           clearForm();
@@ -55,16 +79,17 @@ function Deposit() {
                   />
                 ) : (
                   <Form
-                    header="Deposit"
+                    header="Withdraw"
                     className="header"
                     title={user.data[0].name}
-                    text="Enter the amount you wish to deposit"
+                    text="Enter the amount you wish to Withdraw"
                     displayField={[{ field: "Balance:", value: ` $${user.data[0].balance}` }]}
-                    inputField={[{ field: "Deposit Value", value: deposit, callBack: setDeposit }]}
+                    inputField={[{ field: "Withdraw Value", value: withdraw, callBack: setWithdraw }]}
                     onClick={handleClick}
-                    button="Deposit"
+                    button="Withdraw"
                     buttonClass={button}
                     min="0"
+                    status={status}
                   />
                 )}
               </>
@@ -85,4 +110,4 @@ function Deposit() {
   );
 }
 
-export default Deposit;
+export default Withdraw;

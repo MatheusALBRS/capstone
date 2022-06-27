@@ -8,7 +8,7 @@ const client = new MongoClient(url);
 const dbName = "badbank";
 
 client.connect();
-console.log("Connected successfully to  database server");
+console.log("Connected successfully to database server");
 
 const db = client.db(dbName);
 
@@ -20,6 +20,20 @@ function create(name, email, password) {
     collection.insertOne(doc, (err, result) => {
       err ? reject(err) : resolve(doc);
     });
+  });
+}
+
+//Balance operations
+function balanceOperation(user, amount) {
+  return new Promise((resolve, reject) => {
+    db.collection("users")
+      .updateOne(
+        { name: user },
+        {
+          $set: { balance: amount },
+          $currentDate: { lastModified: true },
+        }
+      )
   });
 }
 
@@ -35,4 +49,4 @@ function all() {
   });
 }
 
-module.exports = { create, all };
+module.exports = { create, all, balanceOperation };

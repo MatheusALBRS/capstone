@@ -1,4 +1,4 @@
-import { React } from "react";
+import { React, useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { Routes, Route, BrowserRouter, Outlet } from "react-router-dom";
 import App from "./App.js";
@@ -10,12 +10,25 @@ import Withdraw from "./components/withdraw.js";
 import Deposit from "./components/deposit.js";
 import "./index.css";
 import { createContext } from "react";
-import { users, user } from "./utils/data";
+// import { users, user } from "./utils/data";
 
 export const UsersData = createContext();
 export const UserContext = createContext();
 
 function Spa() {
+  const [users, setUsers] = useState([])
+  const user = []
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await fetch("/account/alldata");
+      const data = await response.json();
+      console.log(data);
+      setUsers(data)
+    }
+    fetchData();
+  }, []);
+
   return (
     <>
       <UsersData.Provider value={users}>

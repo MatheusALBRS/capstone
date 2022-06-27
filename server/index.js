@@ -25,6 +25,17 @@ app.get("/account/create/:name/:email/:password", (req, res) => {
   });
 });
 
+app.get("/update/balance/:user/:balance", (req, res) => {
+  const doc = {
+    user: req.params.user,
+    balance: req.params.balance,
+  };
+  dal.balanceOperation(doc.user, doc.balance).then((operation) => {
+    console.log("Done!");
+    res.send(operation);
+  });
+});
+
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {

@@ -28,7 +28,7 @@ function AllData() {
         return (
           <>
             <h3>users</h3>
-            {<h1>{JSON.stringify(data)}</h1>}
+            {<p>{JSON.stringify(data)}</p>}
             <hr></hr>
             {value.isLogedIn ? (
               <Form
