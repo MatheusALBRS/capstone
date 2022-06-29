@@ -26,14 +26,13 @@ function create(name, email, password) {
 //Balance operations
 function balanceOperation(user, amount) {
   return new Promise((resolve, reject) => {
-    db.collection("users")
-      .updateOne(
-        { name: user },
-        {
-          $set: { balance: amount },
-          $currentDate: { lastModified: true },
-        }
-      )
+    db.collection("users").updateOne(
+      { name: user },
+      {
+        $set: { balance: amount },
+        $currentDate: { lastModified: true },
+      }
+    );
   });
 }
 

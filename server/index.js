@@ -1,7 +1,10 @@
 var express = require("express");
+const path = require("path");
 var cors = require("cors");
 var dal = require("./mongo_test.js");
 var app = express();
+
+app.use(express.static(path.join(__dirname, "build")));
 
 app.get("/api", (req, res) => {
   res.json({ message: "Hello from the other side..." });
@@ -36,7 +39,11 @@ app.get("/update/balance/:user/:balance", (req, res) => {
   });
 });
 
-const PORT = process.env.PORT || 3001;
+app.get("/*", function (req, res) {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
+
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Listening to PORT: ${PORT}`);
