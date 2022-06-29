@@ -1,3 +1,4 @@
+import { useContext, useState } from "react";
 import { Container } from "react-bootstrap";
 import bankPhoto from "../bank.png";
 import { UserContext } from "../index";
@@ -6,6 +7,16 @@ import Button from "./button";
 import "../Styles.css";
 
 function Home() {
+  const ctx = useContext(UserContext);
+  const [currentState, setCurrentState] = useState(false);
+
+  const logout = () => {
+    ctx.isLogedIn = false;
+    ctx.data.pop();
+    console.log(currentState);
+    setCurrentState(true);
+  };
+
   return (
     <UserContext.Consumer>
       {(value) => {
@@ -20,6 +31,9 @@ function Home() {
                   className="header"
                   image={<img alt="" src={bankPhoto} className="img-fluid" />}
                 />
+                <button className="btn btn-secondary btn-lg button" onClick={logout}>
+                  Logout
+                </button>
               </Container>
             ) : (
               <>
